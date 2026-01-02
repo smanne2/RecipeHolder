@@ -472,9 +472,10 @@ class RecipeSearchService:
             ).scalar_one_or_none()
             
             if not tag:
-                # Create new tag
+                # Create new tag and flush to avoid duplicates
                 tag = Tag(name=name)
                 db.add(tag)
+                db.flush()
             
             tags.append(tag)
         
