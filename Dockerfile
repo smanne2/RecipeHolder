@@ -45,13 +45,17 @@ COPY app/ ./app/
 COPY templates/ ./templates/
 COPY static/ ./static/
 
-# Create non-root user for security
+# Create non-root user for security and data directory
 RUN adduser -D -u 1000 recipeuser && \
     mkdir -p /data/recipes && \
     chown -R recipeuser:recipeuser /app /data
 
-# Switch to non-root user
-USER recipeuser
+# Create entrypoint script to fix permissions on mounted volumes
+RUN printf '#!/bin/sh\nchown -R recipeuser:recipeuser /data 2>/dev/null || true\nexec su-exec recipeuser "$@"\n' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Install su-exec for proper user switching
+RUN apk add --no-cache su-exec
 
 # Expose port
 EXPOSE 8000
@@ -59,6 +63,8 @@ EXPOSE 8000
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Run application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]

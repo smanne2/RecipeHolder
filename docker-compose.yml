@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   recipe-holder:
     build:
@@ -9,13 +7,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Mount data directory for persistent storage
-      - ./data:/data
-      # Mount static directory for custom logo (place your logo.png here)
-      - ./static:/app/static
-      # Optional: mount for development (comment out in production)
-      # - ./app:/app/app
-      # - ./templates:/app/templates
+      # Named volume for persistent data storage (managed by Docker)
+      - recipe-data:/data
+      # Optional: bind mount for custom logo (uncomment if needed)
+      # - ./static:/app/static
     environment:
       - DATABASE_PATH=/data/recipe_index.db
       - RECIPES_PATH=/data/recipes
