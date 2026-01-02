@@ -11,6 +11,8 @@ services:
     volumes:
       # Mount data directory for persistent storage
       - ./data:/data
+      # Mount static directory for custom logo (place your logo.png here)
+      - ./static:/app/static
       # Optional: mount for development (comment out in production)
       # - ./app:/app/app
       # - ./templates:/app/templates
@@ -21,6 +23,9 @@ services:
       - MAX_RECIPE_SIZE=1048576
       - SCRAPE_TIMEOUT=30
       - PORT=8000
+      # Custom logo for print watermark (optional)
+      # Place your logo in ./static/logo.png and set:
+      # - PRINT_LOGO_URL=/static/logo.png
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

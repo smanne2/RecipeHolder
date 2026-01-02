@@ -82,23 +82,473 @@
     .source-link:hover {
         text-decoration: underline;
     }
+
+    /* ============================================
+       IPAD LANDSCAPE MODE - Two-column view
+       Targets landscape tablets (768px - 1024px height in landscape)
+       ============================================ */
+    @media screen and (min-width: 1024px) and (max-height: 820px) and (orientation: landscape),
+           screen and (min-width: 1180px) and (max-height: 900px) and (orientation: landscape) {
+        
+        /* Hide scrollbars and prevent scroll */
+        body.ipad-view {
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        body.ipad-view .container-main {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            padding-bottom: 0;
+        }
+        
+        /* Compact header */
+        body.ipad-view .recipe-header {
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        body.ipad-view .recipe-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        body.ipad-view .recipe-header .lead {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Horizontal meta row */
+        body.ipad-view .recipe-meta-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        body.ipad-view .meta-item {
+            flex: 0 0 auto;
+            padding: 0.25rem 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        body.ipad-view .meta-item > div:first-child {
+            display: none;
+        }
+        
+        body.ipad-view .meta-label {
+            font-size: 0.75rem;
+        }
+        
+        body.ipad-view .meta-value {
+            font-size: 0.9rem;
+        }
+        
+        /* Hide tags and source in compact view */
+        body.ipad-view .recipe-header .mt-3 {
+            display: none;
+        }
+        
+        /* Two-column layout */
+        body.ipad-view .recipe-content {
+            padding: 1rem 1.5rem;
+            height: calc(100vh - 200px);
+            overflow: hidden;
+        }
+        
+        body.ipad-view .screen-content {
+            display: none;
+        }
+        
+        body.ipad-view .print-layout {
+            display: flex;
+            gap: 1.5rem;
+            height: 100%;
+        }
+        
+        body.ipad-view .print-ingredients {
+            flex: 0 0 35%;
+            border-right: 1px solid #ddd;
+            padding-right: 1rem;
+            overflow-y: auto;
+        }
+        
+        body.ipad-view .print-instructions {
+            flex: 0 0 63%;
+            overflow-y: auto;
+        }
+        
+        body.ipad-view .recipe-content h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        body.ipad-view .recipe-content li {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+        
+        /* Hide file location and buttons row */
+        body.ipad-view .mb-3.d-flex,
+        body.ipad-view .mt-4.p-3.bg-light {
+            display: none;
+        }
+        
+        /* Floating action buttons for iPad */
+        body.ipad-view .ipad-floating-actions {
+            display: flex;
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+        
+        body.ipad-view .ipad-floating-actions .btn {
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+    }
+    
+    /* Default: hide iPad-specific elements */
+    .ipad-floating-actions {
+        display: none;
+    }
+    
+    .ipad-view-toggle {
+        display: none;
+    }
+    
+    /* Show toggle button on potential iPad devices */
+    @media screen and (min-width: 1024px) and (max-height: 820px) and (orientation: landscape),
+           screen and (min-width: 1180px) and (max-height: 900px) and (orientation: landscape) {
+        .ipad-view-toggle {
+            display: inline-block;
+        }
+    }
+
+    /* ============================================
+       PRINT STYLES - Professional Single Page
+       ============================================ */
+    @media print {
+        /* Page setup - US Letter preferred, auto-detect supported */
+        @page {
+            size: auto;
+            margin: 0.5in;
+        }
+        
+        /* Hide non-essential elements */
+        .navbar,
+        footer,
+        .btn,
+        .badge-tag,
+        .modal,
+        .mb-3.d-flex,
+        .mt-4.p-3.bg-light,
+        .source-link i,
+        .no-print {
+            display: none !important;
+        }
+        
+        /* Reset body */
+        body {
+            background: white !important;
+            font-size: 10pt !important;
+            line-height: 1.3 !important;
+            color: #000 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        /* Container adjustments */
+        .container,
+        .container-main {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        /* Recipe header - compact */
+        .recipe-header {
+            padding: 0 0 0.3in 0 !important;
+            margin-bottom: 0.2in !important;
+            box-shadow: none !important;
+            border-bottom: 2pt solid #2c3e50 !important;
+            border-radius: 0 !important;
+            page-break-inside: avoid;
+        }
+        
+        .recipe-header h1 {
+            font-size: 16pt !important;
+            margin-bottom: 0.1in !important;
+            color: #2c3e50 !important;
+        }
+        
+        .recipe-header .lead {
+            font-size: 9pt !important;
+            margin-bottom: 0.1in !important;
+            color: #444 !important;
+        }
+        
+        /* Meta information - single horizontal row */
+        .recipe-meta-grid {
+            display: flex !important;
+            flex-wrap: wrap;
+            gap: 0.2in !important;
+            margin-top: 0.1in !important;
+            padding: 0.1in 0 !important;
+            border-top: 0.5pt solid #ddd;
+        }
+        
+        .meta-item {
+            flex: 0 0 auto !important;
+            padding: 0 !important;
+            background: none !important;
+            text-align: left !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.05in;
+        }
+        
+        .meta-item i {
+            display: none !important;
+        }
+        
+        .meta-label {
+            font-size: 8pt !important;
+            font-weight: normal !important;
+        }
+        
+        .meta-label::after {
+            content: ": ";
+        }
+        
+        .meta-value {
+            font-size: 9pt !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Hide tags in print header */
+        .recipe-header .mt-3:has(.badge-tag),
+        .recipe-header > .mt-3:last-of-type {
+            display: none !important;
+        }
+        
+        /* Two-column layout for content */
+        .recipe-content {
+            padding: 0 !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+        
+        /* Print layout container */
+        .print-layout {
+            display: flex !important;
+            gap: 0.3in;
+        }
+        
+        .print-ingredients {
+            flex: 0 0 35%;
+            border-right: 0.5pt solid #ddd;
+            padding-right: 0.2in;
+        }
+        
+        .print-instructions {
+            flex: 0 0 63%;
+        }
+        
+        .recipe-content h1 {
+            display: none !important;
+        }
+        
+        .recipe-content h2 {
+            font-size: 11pt !important;
+            margin-top: 0 !important;
+            margin-bottom: 0.1in !important;
+            padding-bottom: 0.05in !important;
+            border-bottom: 1pt solid #2c3e50 !important;
+            color: #2c3e50 !important;
+        }
+        
+        .recipe-content ul,
+        .recipe-content ol {
+            padding-left: 0.2in !important;
+            margin: 0 !important;
+        }
+        
+        .recipe-content li {
+            font-size: 9pt !important;
+            margin-bottom: 0.03in !important;
+            line-height: 1.25 !important;
+        }
+        
+        .recipe-content p {
+            font-size: 9pt !important;
+            margin-bottom: 0.05in !important;
+        }
+        
+        /* Overflow handling for long recipes */
+        .recipe-content {
+            max-height: 7.5in;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Continued indicator for overflow */
+        .print-overflow-indicator {
+            display: none;
+        }
+        
+        /* Print watermark/footer */
+        .print-watermark {
+            display: block !important;
+            position: fixed;
+            bottom: 0.3in;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 8pt;
+            color: #999;
+            border-top: 0.5pt solid #eee;
+            padding-top: 0.1in;
+        }
+        
+        .print-watermark img {
+            max-height: 0.25in;
+            margin-right: 0.1in;
+            vertical-align: middle;
+        }
+        
+        /* Source URL in print */
+        .print-source {
+            display: block !important;
+            font-size: 7pt;
+            color: #666;
+            margin-top: 0.05in;
+        }
+        
+        /* Page break control */
+        .recipe-header,
+        .recipe-content {
+            page-break-inside: avoid;
+        }
+        
+        /* Force single page */
+        html, body {
+            height: auto !important;
+            overflow: visible !important;
+        }
+    }
+    
+    /* Screen-only elements */
+    .print-only {
+        display: none;
+    }
+    
+    .print-layout {
+        display: none;
+    }
+    
+    .screen-content {
+        display: block;
+    }
     
     @media print {
-        .navbar, footer, .btn, .badge-tag { display: none; }
-        .recipe-header, .recipe-content { box-shadow: none; }
+        .print-only {
+            display: block !important;
+        }
+        
+        .screen-only {
+            display: none !important;
+        }
+        
+        .print-layout {
+            display: flex !important;
+        }
+        
+        .screen-content {
+            display: none !important;
+        }
+        
+        /* Overflow note - hidden by default, shown by JS when needed */
+        .print-overflow-note {
+            display: none !important;
+        }
+        
+        .print-overflow-note.show-overflow {
+            display: block !important;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Back Button -->
-<div class="mb-3">
-    <a href="/" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Recipes
-    </a>
-    <button onclick="window.print()" class="btn btn-outline-secondary">
-        <i class="bi bi-printer"></i> Print
+<div class="mb-3 d-flex justify-content-between">
+    <div>
+        <a href="/" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Recipes
+        </a>
+        <button onclick="window.print()" class="btn btn-outline-secondary">
+            <i class="bi bi-printer"></i> Print
+        </button>
+        <button onclick="toggleiPadView()" class="btn btn-outline-secondary ipad-view-toggle">
+            <i class="bi bi-layout-split"></i> Reader View
+        </button>
+    </div>
+    <div>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            <i class="bi bi-trash"></i> Delete
+        </button>
+    </div>
+</div>
+
+<!-- iPad Floating Actions (visible in reader view) -->
+<div class="ipad-floating-actions">
+    <button onclick="toggleiPadView()" class="btn btn-secondary" title="Exit Reader View">
+        <i class="bi bi-x-lg"></i>
     </button>
+    <a href="/" class="btn btn-outline-secondary" title="Back to Recipes">
+        <i class="bi bi-house"></i>
+    </a>
+    <button onclick="window.print()" class="btn btn-outline-secondary" title="Print">
+        <i class="bi bi-printer"></i>
+    </button>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Recipe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong>{{ recipe.title }}</strong>?</p>
+                <p class="text-muted">This will permanently remove the recipe file from storage.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" action="/recipe/{{ recipe.slug }}/delete" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete Recipe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Recipe Header -->
@@ -174,15 +624,173 @@
 
 <!-- Recipe Content -->
 <div class="recipe-content">
-    {{ content_html | safe }}
+    <div class="print-layout">
+        <div class="print-ingredients" id="print-ingredients-col">
+            <!-- Ingredients will be extracted here by JS for print -->
+        </div>
+        <div class="print-instructions" id="print-instructions-col">
+            <!-- Instructions will be extracted here by JS for print -->
+        </div>
+    </div>
+    <div class="screen-content">
+        {{ content_html | safe }}
+    </div>
+</div>
+
+<!-- Print-only: Continued indicator for overflow -->
+<div class="print-only print-overflow-note" id="overflow-note" style="display:none;">
+    <em style="font-size: 8pt; color: #666;">...continued on next page</em>
+</div>
+
+<!-- Print-only: Watermark/Footer with logo placeholder -->
+<div class="print-only print-watermark">
+    <!-- Logo placeholder: Replace src with your logo path -->
+    <!-- Example: <img src="/static/logo.png" alt="Logo" class="print-logo"> -->
+    {% if print_logo_url %}
+    <img src="{{ print_logo_url }}" alt="Logo" class="print-logo">
+    {% endif %}
+    <span>Recipe Holder</span>
+    {% if recipe.source_url %}
+    <div class="print-source">Source: {{ recipe.source_url }}</div>
+    {% endif %}
 </div>
 
 <!-- File Location -->
-<div class="mt-4 p-3 bg-light rounded">
+<div class="mt-4 p-3 bg-light rounded screen-only">
     <small class="text-muted">
         <i class="bi bi-file-earmark-text"></i> 
         This recipe is stored as a text file at: 
         <code>{{ recipe.filepath }}</code>
     </small>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Print layout preparation - reorganize content for two-column print
+document.addEventListener('DOMContentLoaded', function() {
+    const screenContent = document.querySelector('.screen-content');
+    const printIngredients = document.getElementById('print-ingredients-col');
+    const printInstructions = document.getElementById('print-instructions-col');
+    
+    // Clone content for print layout
+    const contentClone = screenContent.cloneNode(true);
+    
+    // Find and separate ingredients and instructions
+    let currentSection = 'instructions';
+    let ingredientsHTML = '';
+    let instructionsHTML = '';
+    
+    // Parse the content looking for sections
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = contentClone.innerHTML;
+    
+    let currentBuffer = '';
+    let foundIngredients = false;
+    let foundInstructions = false;
+    
+    Array.from(tempDiv.children).forEach(child => {
+        const text = child.textContent.toLowerCase();
+        
+        if (child.tagName === 'H2') {
+            if (text.includes('ingredient')) {
+                currentSection = 'ingredients';
+                foundIngredients = true;
+                ingredientsHTML += child.outerHTML;
+                return;
+            } else if (text.includes('instruction') || text.includes('direction') || text.includes('method') || text.includes('step')) {
+                currentSection = 'instructions';
+                foundInstructions = true;
+                instructionsHTML += child.outerHTML;
+                return;
+            } else if (text.includes('note') || text.includes('tip')) {
+                // Notes go with instructions
+                currentSection = 'instructions';
+                instructionsHTML += child.outerHTML;
+                return;
+            }
+        }
+        
+        if (currentSection === 'ingredients') {
+            ingredientsHTML += child.outerHTML;
+        } else {
+            instructionsHTML += child.outerHTML;
+        }
+    });
+    
+    // If no clear sections found, put everything in instructions
+    if (!foundIngredients && !foundInstructions) {
+        instructionsHTML = tempDiv.innerHTML;
+        ingredientsHTML = '<h2>Ingredients</h2><p><em>See full recipe</em></p>';
+    }
+    
+    printIngredients.innerHTML = ingredientsHTML;
+    printInstructions.innerHTML = instructionsHTML;
+});
+
+// Before print - check for overflow and add indicator
+window.addEventListener('beforeprint', function() {
+    const content = document.querySelector('.recipe-content');
+    const overflowNote = document.getElementById('overflow-note');
+    
+    // Check if content will overflow (rough estimate based on content height)
+    // This is approximate - actual page height varies
+    const contentHeight = content.scrollHeight;
+    const estimatedPageHeight = 900; // ~7.5 inches at 120dpi
+    
+    if (contentHeight > estimatedPageHeight) {
+        overflowNote.classList.add('show-overflow');
+    }
+});
+
+window.addEventListener('afterprint', function() {
+    document.getElementById('overflow-note').classList.remove('show-overflow');
+});
+
+// iPad Reader View toggle
+function toggleiPadView() {
+    document.body.classList.toggle('ipad-view');
+    
+    // Save preference
+    if (document.body.classList.contains('ipad-view')) {
+        localStorage.setItem('readerViewEnabled', 'true');
+    } else {
+        localStorage.setItem('readerViewEnabled', 'false');
+    }
+}
+
+// Auto-enable reader view on iPad landscape if previously enabled
+(function() {
+    const isLandscapeTablet = window.matchMedia(
+        '(min-width: 1024px) and (max-height: 820px) and (orientation: landscape), ' +
+        '(min-width: 1180px) and (max-height: 900px) and (orientation: landscape)'
+    ).matches;
+    
+    const readerViewEnabled = localStorage.getItem('readerViewEnabled');
+    
+    // Auto-enable on first visit to iPad landscape, or if previously enabled
+    if (isLandscapeTablet && (readerViewEnabled === 'true' || readerViewEnabled === null)) {
+        document.body.classList.add('ipad-view');
+        if (readerViewEnabled === null) {
+            localStorage.setItem('readerViewEnabled', 'true');
+        }
+    }
+})();
+
+// Handle orientation changes
+window.addEventListener('orientationchange', function() {
+    setTimeout(function() {
+        const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+        const readerViewEnabled = localStorage.getItem('readerViewEnabled') === 'true';
+        
+        if (!isLandscape) {
+            // Exit reader view in portrait
+            document.body.classList.remove('ipad-view');
+        } else if (readerViewEnabled) {
+            // Re-enable in landscape if preference was set
+            document.body.classList.add('ipad-view');
+        }
+    }, 100);
+});
+</script>
 {% endblock %}

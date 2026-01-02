@@ -226,7 +226,7 @@ class RecipeSearchService:
                 select(Recipe)
                 .options(joinedload(Recipe.tags))
                 .where(Recipe.slug == slug)
-            ).scalar_one_or_none()
+            ).unique().scalar_one_or_none()
             
             return recipe
         finally:

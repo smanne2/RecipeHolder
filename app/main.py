@@ -197,6 +197,7 @@ async def view_recipe(
                 "recipe": recipe,
                 "recipe_data": recipe_data,
                 "content_html": content_html,
+                "print_logo_url": settings.print_logo_url,
             }
         )
     except HTTPException:
@@ -303,6 +304,44 @@ async def search_recipes(
     return await index(request, q=q, db=db)
 
 
+@app.post("/recipe/{slug}/delete", response_class=HTMLResponse)
+async def delete_recipe(
+    request: Request,
+    slug: str,
+    db: Session = Depends(get_db)
+):
+    """Delete a recipe."""
+    try:
+        # Get recipe first to verify it exists
+        recipe = search_service.get_recipe_by_slug(slug, db=db)
+        if not recipe:
+            raise HTTPException(status_code=404, detail="Recipe not found")
+        
+        # Delete from storage
+        storage.delete_recipe(slug)
+        
+        # Remove from index
+        search_service.remove_recipe_from_index(slug, db=db)
+        
+        logger.info(f"Recipe deleted: {slug}")
+        
+        # Redirect to home page
+        return RedirectResponse(
+            url="/",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting recipe '{slug}': {e}", exc_info=True)
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"Failed to delete recipe: {str(e)}"},
+            status_code=500
+        )
+
+
 # ============================================================================
 # API Routes (JSON)
 # ============================================================================
@@ -392,6 +431,36 @@ async def api_add_recipe(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"API add recipe failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/recipe/{slug}", response_model=ApiResponse)
+async def api_delete_recipe(
+    slug: str,
+    db: Session = Depends(get_db)
+):
+    """Delete recipe by slug via API."""
+    try:
+        # Get recipe first to verify it exists
+        recipe = search_service.get_recipe_by_slug(slug, db=db)
+        if not recipe:
+            raise HTTPException(status_code=404, detail="Recipe not found")
+        
+        # Delete from storage
+        storage.delete_recipe(slug)
+        
+        # Remove from index
+        search_service.remove_recipe_from_index(slug, db=db)
+        
+        return ApiResponse(
+            success=True,
+            message="Recipe deleted successfully",
+            data={"slug": slug}
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"API delete recipe failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 

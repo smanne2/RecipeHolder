@@ -29,6 +29,9 @@ class Settings(BaseSettings):
     app_name: str = "RecipeHolder"
     app_version: str = "1.0.0"
     
+    # Print customization
+    print_logo_url: str = ""  # URL/path to custom logo for print watermark (e.g., "/static/logo.png")
+    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

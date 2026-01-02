@@ -215,18 +215,21 @@ class RecipeScraper:
         """
         tags = []
         
-        # Try to get keywords
-        keywords = self._safe_extract(scraper.keywords, default=[])
-        if isinstance(keywords, str):
-            keywords = [k.strip() for k in keywords.split(',')]
+        # Try to get keywords (not all scrapers have this method)
+        keywords = []
+        if hasattr(scraper, 'keywords'):
+            keywords = self._safe_extract(scraper.keywords, default=[])
+            if isinstance(keywords, str):
+                keywords = [k.strip() for k in keywords.split(',')]
         
-        # Try to get category
-        category = self._safe_extract(scraper.category)
-        if category:
-            if isinstance(category, str):
-                tags.append(category.lower())
-            elif isinstance(category, list):
-                tags.extend([c.lower() for c in category])
+        # Try to get category (not all scrapers have this method)
+        if hasattr(scraper, 'category'):
+            category = self._safe_extract(scraper.category)
+            if category:
+                if isinstance(category, str):
+                    tags.append(category.lower())
+                elif isinstance(category, list):
+                    tags.extend([c.lower() for c in category])
         
         # Add keywords as tags
         if keywords:
