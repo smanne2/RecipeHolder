@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}{{ recipe.title }} - RecipeHolder{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recipe-header {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .recipe-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .recipe-content h2 {
+        color: var(--primary-color);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--secondary-color);
+    }
+    
+    .recipe-content h2:first-child {
+        margin-top: 0;
+    }
+    
+    .recipe-content ul, .recipe-content ol {
+        padding-left: 1.5rem;
+    }
+    
+    .recipe-content li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+    
+    .recipe-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    .meta-item {
+        text-align: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+    
+    .meta-item i {
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+    }
+    
+    .meta-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    
+    .meta-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    .source-link {
+        color: var(--secondary-color);
+        text-decoration: none;
+        word-break: break-all;
+    }
+    
+    .source-link:hover {
+        text-decoration: underline;
+    }
+    
+    @media print {
+        .navbar, footer, .btn, .badge-tag { display: none; }
+        .recipe-header, .recipe-content { box-shadow: none; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Back Button -->
+<div class="mb-3">
+    <a href="/" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Recipes
+    </a>
+    <button onclick="window.print()" class="btn btn-outline-secondary">
+        <i class="bi bi-printer"></i> Print
+    </button>
+</div>
+
+<!-- Recipe Header -->
+<div class="recipe-header">
+    <h1 class="mb-3">{{ recipe.title }}</h1>
+    
+    {% if recipe.description %}
+    <p class="lead text-muted">{{ recipe.description }}</p>
+    {% endif %}
+    
+    <!-- Meta Information -->
+    <div class="recipe-meta-grid">
+        {% if recipe.prep_time %}
+        <div class="meta-item">
+            <div><i class="bi bi-clock-history"></i></div>
+            <div class="meta-label">Prep Time</div>
+            <div class="meta-value">{{ recipe.prep_time | format_time }}</div>
+        </div>
+        {% endif %}
+        
+        {% if recipe.cook_time %}
+        <div class="meta-item">
+            <div><i class="bi bi-fire"></i></div>
+            <div class="meta-label">Cook Time</div>
+            <div class="meta-value">{{ recipe.cook_time | format_time }}</div>
+        </div>
+        {% endif %}
+        
+        {% if recipe.total_time %}
+        <div class="meta-item">
+            <div><i class="bi bi-clock"></i></div>
+            <div class="meta-label">Total Time</div>
+            <div class="meta-value">{{ recipe.total_time | format_time }}</div>
+        </div>
+        {% endif %}
+        
+        {% if recipe.servings %}
+        <div class="meta-item">
+            <div><i class="bi bi-people"></i></div>
+            <div class="meta-label">Servings</div>
+            <div class="meta-value">{{ recipe.servings }}</div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Tags -->
+    {% if recipe.tags %}
+    <div class="mt-3">
+        <strong>Tags:</strong>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            {% for tag in recipe.tags %}
+            <a href="/?tag={{ tag.name }}" class="badge-tag">
+                {{ tag.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Source -->
+    {% if recipe.source_url %}
+    <div class="mt-3">
+        <small class="text-muted">
+            <strong>Source:</strong> 
+            <a href="{{ recipe.source_url }}" target="_blank" rel="noopener" class="source-link">
+                {{ recipe.source_url }}
+                <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+        </small>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Recipe Content -->
+<div class="recipe-content">
+    {{ content_html | safe }}
+</div>
+
+<!-- File Location -->
+<div class="mt-4 p-3 bg-light rounded">
+    <small class="text-muted">
+        <i class="bi bi-file-earmark-text"></i> 
+        This recipe is stored as a text file at: 
+        <code>{{ recipe.filepath }}</code>
+    </small>
+</div>
+{% endblock %}

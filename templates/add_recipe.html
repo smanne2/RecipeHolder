@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Add Recipe - RecipeHolder{% endblock %}
+
+{% block extra_css %}
+<style>
+    .add-recipe-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .card-add {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .alert {
+        border-radius: 6px;
+    }
+    
+    .info-box {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+    }
+    
+    .info-box h5 {
+        color: #1976d2;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-box ul {
+        margin-bottom: 0;
+        padding-left: 1.5rem;
+    }
+    
+    .example-urls {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .example-urls a {
+        color: #6c757d;
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="add-recipe-container">
+    <h1 class="mb-4 text-center">Add New Recipe</h1>
+    
+    <!-- Info Box -->
+    <div class="info-box">
+        <h5><i class="bi bi-info-circle"></i> How it works</h5>
+        <ul class="mb-0">
+            <li>Enter the URL of any recipe from supported websites</li>
+            <li>The recipe will be automatically extracted and saved</li>
+            <li>Recipes are stored as readable text files</li>
+            <li>Supports 600+ recipe websites</li>
+        </ul>
+    </div>
+    
+    <!-- Error Message -->
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> {{ error }}
+        {% if existing_slug %}
+        <div class="mt-2">
+            <a href="/recipe/{{ existing_slug }}" class="btn btn-sm btn-outline-danger">
+                View Existing Recipe
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- Add Recipe Form -->
+    <div class="card-add">
+        <form method="post" action="/add">
+            <div class="mb-3">
+                <label for="url" class="form-label">
+                    <strong>Recipe URL</strong>
+                </label>
+                <input 
+                    type="url" 
+                    class="form-control form-control-lg" 
+                    id="url" 
+                    name="url" 
+                    placeholder="https://example.com/recipe-name"
+                    value="{{ url or '' }}"
+                    required
+                    autofocus
+                >
+                <div class="form-text">
+                    Paste the full URL of the recipe page
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-download"></i> Scrape Recipe
+                </button>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Example URLs -->
+    <div class="example-urls mt-4 text-center">
+        <p class="mb-1"><strong>Supported sites include:</strong></p>
+        <p>AllRecipes, Food Network, Serious Eats, Tasty, BBC Good Food, and 600+ more</p>
+    </div>
+    
+    <!-- API Info -->
+    <div class="mt-5 p-3 bg-light rounded">
+        <h6><i class="bi bi-code-slash"></i> Developer API</h6>
+        <p class="mb-2"><small>You can also add recipes programmatically:</small></p>
+        <pre class="mb-0"><code>POST /api/recipe
+{
+  "url": "https://example.com/recipe"
+}</code></pre>
+    </div>
+</div>
+{% endblock %}

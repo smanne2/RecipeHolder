@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  recipe-holder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recipe-holder
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount data directory for persistent storage
+      - ./data:/data
+      # Optional: mount for development (comment out in production)
+      # - ./app:/app/app
+      # - ./templates:/app/templates
+    environment:
+      - DATABASE_PATH=/data/recipe_index.db
+      - RECIPES_PATH=/data/recipes
+      - LOG_LEVEL=INFO
+      - MAX_RECIPE_SIZE=1048576
+      - SCRAPE_TIMEOUT=30
+      - PORT=8000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - recipe-network
+
+networks:
+  recipe-network:
+    driver: bridge
+
+# Optional: Add volumes for explicit volume management
+volumes:
+  recipe-data:
+    driver: local

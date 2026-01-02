@@ -1,0 +1,1 @@
+"""RecipeHolder application package."""
